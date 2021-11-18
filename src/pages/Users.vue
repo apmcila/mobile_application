@@ -39,17 +39,20 @@ export default {
     }
   },
   mounted() {
-    axios
-      .get(process.env.USERS_URL)
-      .then(res => {
-        this.users = res.data.data
-        const paginationData = res.data.meta.pagination
-        this.setPaginationObject(paginationData)
-        this.loading = false
-      })
-      .catch(err => console.log('An error occured ', err))
+    this.fetchData();
   },
   methods: {
+    fetchData(page=1) {
+      axios
+        .get(`${process.env.USERS_URL}?page=${page}`)
+        .then(res => {
+          this.users = res.data.data
+          const paginationData = res.data.meta.pagination
+          this.setPaginationObject(paginationData)
+          this.loading = false
+        })
+        .catch(err => console.log('An error occured ', err))
+    },
     setPaginationObject(paginationData) {
       this.pagination = {
         sortBy: 'desc',
@@ -59,8 +62,8 @@ export default {
         rowsNumber: paginationData.total
       }
     },
-    onRequest(props){
-      console.log(props)
+    onRequest({pagination}) {
+      this.fetchData(pagination.page);
     }
   }
 }
