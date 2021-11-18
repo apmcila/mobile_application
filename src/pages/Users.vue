@@ -1,12 +1,14 @@
 <template>
   <div class="q-pa-md">
     <q-table
+      row-key="id"
+      class="sticky-header"
       :columns="columns"
       :data="users"
-      @request="onRequest"
+      :loading="loading"
       :rows-per-page-options="[0]"
       :pagination.sync="pagination"
-      row-key="id"
+      @request="onRequest"
     />
   </div>
 </template>
@@ -39,10 +41,11 @@ export default {
     }
   },
   mounted() {
-    this.fetchData();
+    this.fetchData()
   },
   methods: {
-    fetchData(page=1) {
+    fetchData(page = 1) {
+      this.loading = true;
       axios
         .get(`${process.env.USERS_URL}?page=${page}`)
         .then(res => {
@@ -52,6 +55,7 @@ export default {
           this.loading = false
         })
         .catch(err => console.log('An error occured ', err))
+        .finally(() => this.loading = false)
     },
     setPaginationObject(paginationData) {
       this.pagination = {
@@ -62,12 +66,39 @@ export default {
         rowsNumber: paginationData.total
       }
     },
-    onRequest({pagination}) {
-      this.fetchData(pagination.page);
+    onRequest({ pagination }) {
+      this.fetchData(pagination.page)
     }
   }
 }
 </script>
 
-<style>
+<style lang="scss">
+.sticky-header {
+  height: 95vh;
+  
+  thead tr th {
+    position: sticky;
+    z-index: 1;
+  }
+
+  thead tr:first-child th {
+    top: 0;
+  }
+
+  .q-table__top,
+  .q-table__bottom,
+  thead tr:first-child th {
+    background-color: #e7e7e7;
+  }
+
+  &.q-table--loading thead tr:last-child th{
+    top: 48px;
+  }
+  
+  tbody tr:nth-child(even){
+    background: #eaf0ff;
+  }
+
+}
 </style>
