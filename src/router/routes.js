@@ -19,12 +19,19 @@ const routes = [
         }
       },
       {
+        path: 'users',
+        component: () => import('pages/Users.vue'),
+        meta: {
+          auth: true
+        }
+      },
+      {
         path: 'profile',
         component: () => import('pages/Profile.vue'),
         meta: {
           auth: true
         }
-      }
+      },
     ]
   },
 

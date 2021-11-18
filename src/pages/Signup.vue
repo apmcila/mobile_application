@@ -118,7 +118,7 @@ export default {
         this.$nextTick(function() {
           const path = this.$route.query.redirect
             ? this.$route.query.redirect
-            : '/profile'
+            : '/users'
           this.$router.push(path)
         })
       } catch (e) {
