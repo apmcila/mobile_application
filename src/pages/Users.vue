@@ -17,7 +17,6 @@
           icon="add"
           padding="sm"
           outline
-          @click="addRow"
         />
       </template>
       <template v-slot:header="props">
@@ -47,7 +46,11 @@
                       <q-icon name="edit" size="xs" />
                     </q-item-section>
                   </q-item>
-                  <q-item clickable v-close-popup>
+                  <q-item
+                    clickable
+                    v-close-popup
+                    @click="confirmDelete(props.row)"
+                  >
                     <q-item-section>Delete</q-item-section>
                     <q-item-section side>
                       <q-icon name="delete" color="red-6" size="xs" />
@@ -120,6 +123,42 @@ export default {
     },
     onRequest({ pagination }) {
       this.fetchData(pagination.page)
+    },
+    confirmDelete(user) {
+      this.$q
+        .dialog({
+          title: 'Delete User ' + user.id,
+          message: `Are you sure you want to delete user - ${user.name} (${user.status})?`,
+          cancel: true,
+          focus: 'cancel',
+          persistent: true,
+          ok: {
+            label: 'Yes',
+            flat: true,
+            color: 'negative'
+          }
+        })
+        .onOk(async () => {
+          this.$q.loading.show({ message: 'Deleting user...' })
+          try {
+            await axios.delete(
+              `${process.env.USERS_URL}/${user.id}?access-token=${process.env.API_ACCESS_TOKEN}`
+            )
+            this.$q.notify({
+              type: 'positive',
+              message: 'User deleted successfully !'
+            })
+            this.fetchData(this.pagination.page)
+          } catch (err) {
+            this.$q.notify({
+              type: 'negative',
+              message: 'Sorry ! Could not delete user.'
+            })
+            console.log('Error while deleting user: ', err)
+          } finally {
+            this.$q.loading.hide()
+          }
+        })
     }
   }
 }
