@@ -17,6 +17,7 @@
           icon="add"
           padding="sm"
           outline
+          @click="$router.push('/users/add')"
         />
       </template>
       <template v-slot:header="props">
@@ -96,9 +97,6 @@ export default {
     this.fetchData()
   },
   methods: {
-    print(data) {
-      console.log(data)
-    },
     fetchData(page = 1) {
       this.loading = true
       axios
