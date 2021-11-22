@@ -41,7 +41,7 @@
               </div>
               <q-menu fit anchor="bottom right" self="top right">
                 <q-list>
-                  <q-item clickable v-close-popup>
+                  <q-item clickable v-close-popup @click="$router.push(`/users/edit/${props.row.id}`)">
                     <q-item-section>Edit</q-item-section>
                     <q-item-section side>
                       <q-icon name="edit" size="xs" />
