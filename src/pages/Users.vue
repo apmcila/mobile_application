@@ -19,6 +19,17 @@
           outline
           @click="$router.push('/users/add')"
         />
+        <q-space />
+        <q-btn
+          flat
+          round
+          color="grey-7"
+          icon="home"
+          type="text"
+          @click="$router.push('/')"
+        >
+          <q-tooltip>Home</q-tooltip>
+        </q-btn>
       </template>
       <template v-slot:header="props">
         <q-tr :props="props">
@@ -41,7 +52,11 @@
               </div>
               <q-menu fit anchor="bottom right" self="top right">
                 <q-list>
-                  <q-item clickable v-close-popup @click="$router.push(`/users/edit/${props.row.id}`)">
+                  <q-item
+                    clickable
+                    v-close-popup
+                    @click="$router.push(`/users/edit/${props.row.id}`)"
+                  >
                     <q-item-section>Edit</q-item-section>
                     <q-item-section side>
                       <q-icon name="edit" size="xs" />
