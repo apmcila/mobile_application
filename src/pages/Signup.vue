@@ -70,7 +70,7 @@ export default {
       required: val => !!val || 'This field is required',
       name: val => val.trim().length >= 3 || 'Minimum 3 characters required',
       phone: val => {
-        if (/^[6-9][0-9]{9}/.test(val)) {
+        if (/^[6-9][0-9]{9}$/.test(val)) {
           return true
         }
         return 'Invalid phone number'
@@ -99,6 +99,14 @@ export default {
   },
   methods: {
     async signup() {
+      const isValid = await this.$refs.signupForm.validate()
+      if (!isValid) {
+        this.$q.notify({
+          type: 'negative',
+          message: 'One or more fields are invalid !'
+        })
+        return
+      }
       this.loading = true
       try {
         const { user } = await firebaseAuth.createUserWithEmailAndPassword(
@@ -115,6 +123,10 @@ export default {
             phoneNumber: this.phoneNumber
           })
         this.resetForm()
+        this.$q.notify({
+          type: "positive",
+          message: "User registered successfully !"
+        })
         this.$nextTick(function() {
           const path = this.$route.query.redirect
             ? this.$route.query.redirect
@@ -122,6 +134,10 @@ export default {
           this.$router.push(path)
         })
       } catch (e) {
+        this.$q.notify({
+          type: "negative",
+          message: e.message
+        })
         console.log('An error occured ', e)
       } finally {
         this.loading = false
