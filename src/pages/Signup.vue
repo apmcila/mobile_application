@@ -108,40 +108,23 @@ export default {
         return
       }
       this.loading = true
-      try {
-        const { user } = await firebaseAuth.createUserWithEmailAndPassword(
-          this.emailId,
-          this.password
-        )
-        await firestore
-          .collection('users')
-          .doc(user.uid)
-          .set({
-            firstName: this.nameFirst,
-            lastName: this.nameLast,
-            email: this.emailId,
-            phoneNumber: this.phoneNumber
-          })
+      const response = await this.$store.dispatch('user/signUp', {
+        email: this.emailId,
+        password: this.password,
+        firstName: this.nameFirst,
+        lastName: this.nameLast,
+        phoneNumber: this.phoneNumber
+      })
+      if (response) {
         this.resetForm()
-        this.$q.notify({
-          type: "positive",
-          message: "User registered successfully !"
-        })
-        this.$nextTick(function() {
+        this.$nextTick(function () {
           const path = this.$route.query.redirect
             ? this.$route.query.redirect
             : '/users'
           this.$router.push(path)
         })
-      } catch (e) {
-        this.$q.notify({
-          type: "negative",
-          message: e.message
-        })
-        console.log('An error occured ', e)
-      } finally {
-        this.loading = false
       }
+      this.loading = false
     },
     resetForm() {
       this.nameFirst = ''

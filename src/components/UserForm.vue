@@ -73,7 +73,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 export default {
   name: 'UserForm',
   props: {
@@ -141,9 +140,20 @@ export default {
       this.loading = true
       try {
         if (this.id) {
-          await this.editUser()
+          await this.$store.dispatch('user/editUser', {
+            userId: this.id,
+            name: this.name,
+            email: this.email,
+            gender: this.gender.value,
+            status: this.status
+          })
         } else {
-          await this.addUser()
+          await this.$store.dispatch('user/addUser', {
+            name: this.name,
+            email: this.email,
+            gender: this.gender.value,
+            status: this.status
+          })
         }
         if (!this.id) {
           this.resetForm()
@@ -162,28 +172,6 @@ export default {
         this.loading = false
       }
     },
-    addUser() {
-      return axios.post(
-        `${process.env.USERS_URL}?access-token=${process.env.API_ACCESS_TOKEN}`,
-        {
-          name: this.name,
-          email: this.email,
-          gender: this.gender.value,
-          status: this.status
-        }
-      )
-    },
-    editUser() {
-      return axios.patch(
-        `${process.env.USERS_URL}/${this.id}?access-token=${process.env.API_ACCESS_TOKEN}`,
-        {
-          name: this.name,
-          email: this.email,
-          gender: this.gender.value,
-          status: this.status
-        }
-      )
-    },
     resetForm() {
       this.name = ''
       this.email = ''
@@ -194,12 +182,21 @@ export default {
   },
   async mounted() {
     if (this.id) {
-      const response = await axios.get(`${process.env.USERS_URL}/${this.id}`)
-      const user = response.data.data
-      this.name = user.name
-      this.email = user.email
-      this.gender = user.gender
-      this.status = user.status
+      try {
+        const response = await this.$store.dispatch('user/getUserInfo', this.id)
+        const user = response.data.data
+        this.name = user.name
+        this.email = user.email
+        this.gender = user.gender
+        this.status = user.status
+      } catch (err) {
+        console.log('An error occured ', err)
+        this.$q.notify({
+          type: 'negative',
+          message: 'Could not get user data. Please try again !'
+        })
+        this.$router.go(-1)
+      }
     }
   }
 }

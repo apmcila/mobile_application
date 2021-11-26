@@ -83,7 +83,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 export default {
   name: 'Users',
   data() {
@@ -112,18 +111,13 @@ export default {
     this.fetchData()
   },
   methods: {
-    fetchData(page = 1) {
+    async fetchData(page = 1) {
       this.loading = true
-      axios
-        .get(`${process.env.USERS_URL}?page=${page}`)
-        .then(res => {
-          this.users = res.data.data
-          const paginationData = res.data.meta.pagination
-          this.setPaginationObject(paginationData)
-          this.loading = false
-        })
-        .catch(err => console.log('An error occured ', err))
-        .finally(() => (this.loading = false))
+      const usersData = await this.$store.dispatch('user/fetchUsers', page)
+      this.users = usersData.data
+      const paginationData = usersData.meta.pagination
+      this.setPaginationObject(paginationData)
+      this.loading = false
     },
     setPaginationObject(paginationData) {
       this.pagination = {
@@ -153,24 +147,24 @@ export default {
         })
         .onOk(async () => {
           this.$q.loading.show({ message: 'Deleting user...' })
-          try {
-            await axios.delete(
-              `${process.env.USERS_URL}/${user.id}?access-token=${process.env.API_ACCESS_TOKEN}`
-            )
+          const response = await this.$store.dispatch(
+            'user/deleteUser',
+            user.id
+          )
+          if (response) {
             this.$q.notify({
               type: 'positive',
               message: 'User deleted successfully !'
             })
             this.fetchData(this.pagination.page)
-          } catch (err) {
+          } else {
             this.$q.notify({
               type: 'negative',
               message: 'Sorry ! Could not delete user.'
             })
             console.log('Error while deleting user: ', err)
-          } finally {
-            this.$q.loading.hide()
           }
+          this.$q.loading.hide()
         })
     }
   }
