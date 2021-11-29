@@ -73,6 +73,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   name: 'UserForm',
   props: {
@@ -128,6 +129,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions('user', ['addUser', 'editUser', 'getUserInfo']),
     async submitForm() {
       const isValid = await this.$refs.addForm.validate()
       if (!isValid) {
@@ -140,7 +142,7 @@ export default {
       this.loading = true
       try {
         if (this.id) {
-          await this.$store.dispatch('user/editUser', {
+          await this.editUser({
             userId: this.id,
             name: this.name,
             email: this.email,
@@ -148,7 +150,7 @@ export default {
             status: this.status
           })
         } else {
-          await this.$store.dispatch('user/addUser', {
+          await this.addUser({
             name: this.name,
             email: this.email,
             gender: this.gender.value,
@@ -183,7 +185,7 @@ export default {
   async mounted() {
     if (this.id) {
       try {
-        const response = await this.$store.dispatch('user/getUserInfo', this.id)
+        const response = await this.getUserInfo(this.id)
         const user = response.data.data
         this.name = user.name
         this.email = user.email

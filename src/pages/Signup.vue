@@ -47,7 +47,7 @@
       :loading="loading"
       :disable="loading"
       class="q-mx-auto q-mt-lg q-px-xl q-py-xs text-grey-10 column"
-      @click="signup"
+      @click="submitForm"
       >SignUp
       <template v-slot:loading>
         <q-spinner-hourglass class="on-left" />
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { firebaseAuth, firestore } from 'src/boot/firebase'
+import { mapActions } from 'vuex'
 export default {
   name: 'Signup',
   data() {
@@ -98,7 +98,8 @@ export default {
     }
   },
   methods: {
-    async signup() {
+    ...mapActions('user', ['signUp']),
+    async submitForm() {
       const isValid = await this.$refs.signupForm.validate()
       if (!isValid) {
         this.$q.notify({
@@ -108,7 +109,7 @@ export default {
         return
       }
       this.loading = true
-      const response = await this.$store.dispatch('user/signUp', {
+      const response = await this.signUp({
         email: this.emailId,
         password: this.password,
         firstName: this.nameFirst,

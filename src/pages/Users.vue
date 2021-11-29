@@ -83,6 +83,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   name: 'Users',
   data() {
@@ -111,9 +112,10 @@ export default {
     this.fetchData()
   },
   methods: {
+    ...mapActions('user', ['fetchUsers', 'deleteUser']),
     async fetchData(page = 1) {
       this.loading = true
-      const usersData = await this.$store.dispatch('user/fetchUsers', page)
+      const usersData = await this.fetchUsers(page)
       this.users = usersData.data
       const paginationData = usersData.meta.pagination
       this.setPaginationObject(paginationData)
@@ -147,10 +149,7 @@ export default {
         })
         .onOk(async () => {
           this.$q.loading.show({ message: 'Deleting user...' })
-          const response = await this.$store.dispatch(
-            'user/deleteUser',
-            user.id
-          )
+          const response = await this.deleteUser(user.id)
           if (response) {
             this.$q.notify({
               type: 'positive',

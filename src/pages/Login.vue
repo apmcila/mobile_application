@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   name: 'Login',
   data() {
@@ -68,17 +69,18 @@ export default {
     }
   },
   methods: {
+    ...mapActions('user', ['signIn']),
     async login() {
       this.loading = true
       try {
-        const user = await this.$store.dispatch('user/signIn', {
+        const user = await this.signIn({
           email: this.emailId,
           password: this.password
         })
         if (user) {
           this.resetForm()
           // Wait for form reset to reflect on DOM before routing
-          this.$nextTick(function() {
+          this.$nextTick(function () {
             const path = this.$route.query.redirect
               ? this.$route.query.redirect
               : '/users'
