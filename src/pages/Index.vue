@@ -4,6 +4,7 @@
       <q-img src="~assets/CILA-INCUBATOR-LOGO-CO.png" />
       <div class="text-h4">UI Starter Kit</div>
       <div class="text-h6" v-if="isLoggedIn">
+        <router-link class="text-orange-9" to="/users"> Users</router-link> |
         <router-link class="text-orange-9" to="/profile"> Profile </router-link>
       </div>
       <div class="text-h6" v-else>
