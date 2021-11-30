@@ -1,28 +1,31 @@
 <template>
   <q-form
     ref="addForm"
-    class="q-mx-auto form-container column justify-center q-my-md"
+    class="q-mx-auto q-px-lg form-container column justify-center q-my-md"
   >
     <div class="text-h5 text-weight-bold text-center">
       {{ `${!id ? 'Add New' : 'Edit'} User` }}
     </div>
-    <div class="q-gutter-lg q-mt-sm">
+    <div class="q-gutter-sm q-mt-md">
       <q-input
         outlined
         v-model="name"
         :rules="[rules.required, rules.name]"
         autofocus
+        dense
         placeholder="Name"
       />
       <q-input
         outlined
         v-model="email"
+        dense
         :rules="[rules.email]"
         placeholder="Email ID"
       />
       <q-select
         label="Gender"
         outlined
+        dense
         v-model="gender"
         :options="genderOptions"
         :rules="[rules.required]"
@@ -30,6 +33,7 @@
       <q-field
         label="User status"
         filled
+        dense
         stack-label
         :rules="[rules.required]"
         v-model="status"
@@ -48,7 +52,7 @@
     <div class="row justify-between">
       <q-btn
         size="md"
-        color="black"
+        color="secondary"
         unelevated
         class="q-mt-lg q-px-xl q-py-xs col-5"
         @click="$router.go(-1)"
@@ -56,7 +60,7 @@
       </q-btn>
       <q-btn
         size="md"
-        color="secondary"
+        color="primary"
         unelevated
         :loading="loading"
         :disable="loading"
@@ -164,6 +168,7 @@ export default {
           type: 'positive',
           message: `User saved successfully !`
         })
+        this.$router.push('/users')
       } catch (e) {
         this.$q.notify({
           type: 'negative',

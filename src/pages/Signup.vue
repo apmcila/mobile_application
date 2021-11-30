@@ -1,32 +1,36 @@
 <template>
   <q-form
     ref="signupForm"
-    class="q-mx-auto form-container column justify-center q-my-md"
+    class="q-mx-auto q-px-lg form-container column justify-center q-my-md"
   >
     <div class="text-h5 text-weight-bold text-center">Create Account</div>
     <div class="text-h6 text-center text-grey-13">Sign Up to get Started!!</div>
-    <div class="q-gutter-lg q-mt-lg">
+    <div class="q-gutter-sm q-mt-lg">
       <q-input
         outlined
         v-model="nameFirst"
+        dense
         :rules="[rules.required, rules.name]"
         autofocus
         placeholder="First Name"
       />
       <q-input
         outlined
+        dense
         v-model="nameLast"
         :rules="[rules.required, rules.name]"
         placeholder="Last Name"
       />
       <q-input
         outlined
+        dense
         v-model="emailId"
         :rules="[rules.email]"
         placeholder="Email ID"
       />
       <q-input
         outlined
+        dense
         type="number"
         :rules="[rules.phone]"
         v-model="phoneNumber"
@@ -34,6 +38,7 @@
       />
       <q-input
         outlined
+        dense
         v-model="password"
         :rules="[rules.password]"
         type="password"
