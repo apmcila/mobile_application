@@ -21,13 +21,14 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'Profile',
   computed: mapState('user', ['user']),
   methods: {
+    ...mapActions('user', ['signOut']),
     async logout() {
-      const result = await this.$store.dispatch('user/signOut')
+      const result = await this.signOut()
       if (result) {
         this.$router.push('/login')
       }
@@ -35,7 +36,7 @@ export default {
   },
   watch: {
     user: {
-      handler: function(val) {
+      handler: function (val) {
         if (val === null) {
           this.$q.loading.show({ message: 'Fetching user data...' })
         } else {

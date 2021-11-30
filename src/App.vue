@@ -5,6 +5,7 @@
 </template>
 <script>
 import { firebaseAuth } from './boot/firebase'
+import { mapActions } from 'vuex'
 import { removeToken, setToken } from './utils/auth'
 export default {
   name: 'App',
@@ -15,8 +16,8 @@ export default {
           const token = await user.getIdToken()
           removeToken()
           setToken(token)
-          await this.$store.dispatch('user/setLoggedIn', true)
-          await this.$store.dispatch('user/fetchUser', user)
+          await this.setLoggedIn(true)
+          await this.fetchUser(user)
         } catch (err) {
           console.log('An error occured : ', err)
         }
@@ -24,6 +25,7 @@ export default {
         removeToken()
       }
     })
-  }
+  },
+  methods: mapActions('user', ['setLoggedIn', 'fetchUser'])
 }
 </script>
