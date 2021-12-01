@@ -8,7 +8,7 @@
 /* eslint-env node */
 const path = require('path')
 
-module.exports = function(/* ctx */) {
+module.exports = function (/* ctx */) {
   return {
     // https://quasar.dev/quasar-cli/supporting-ts
     supportTS: false,
@@ -162,6 +162,11 @@ module.exports = function(/* ctx */) {
     // Full list of options: https://quasar.dev/quasar-cli/developing-capacitor-apps/configuring-capacitor
     capacitor: {
       hideSplashscreen: true
+    },
+
+    bin: {
+      linuxAndroidStudio:
+        '/snap/android-studio/current/android-studio/bin/studio.sh'
     },
 
     // Full list of options: https://quasar.dev/quasar-cli/developing-electron-apps/configuring-electron
