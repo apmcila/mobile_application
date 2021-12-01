@@ -1,20 +1,22 @@
 <template>
   <q-form
     ref="loginForm"
-    class="q-mx-auto form-container column justify-center q-my-md"
+    class="q-mx-auto q-px-lg form-container column justify-center q-my-md"
   >
     <div class="text-h5 text-weight-bold text-center">Welcome,</div>
     <div class="text-h5 text-center text-grey-13">Login to continue!!</div>
-    <div class="q-gutter-lg q-mt-lg">
+    <div class="q-gutter-sm q-mt-lg">
       <q-input
         outlined
         autofocus
+        dense
         v-model="emailId"
         :rules="[rules.required, rules.email]"
         placeholder="Email ID"
       />
       <q-input
         outlined
+        dense
         v-model="password"
         :rules="[rules.required]"
         type="password"

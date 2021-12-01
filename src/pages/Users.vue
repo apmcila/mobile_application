@@ -89,12 +89,24 @@ export default {
   data() {
     const columns = [
       { name: 'id', label: 'ID', required: true, field: 'id', align: 'left' },
-      { name: 'name', label: 'Name', field: 'name', align: 'left' },
-      { name: 'email', label: 'Email', field: 'email', align: 'left' },
+      {
+        name: 'name',
+        label: 'Name',
+        field: 'name',
+        align: 'left',
+        sortable: true
+      },
+      {
+        name: 'email',
+        label: 'Email',
+        field: 'email',
+        align: 'left',
+        sortable: true
+      },
       { name: 'gender', label: 'Gender', field: 'gender', align: 'left' }
     ]
     const pagination = {
-      sortBy: 'desc',
+      sortBy: null,
       descending: false,
       page: 1,
       rowsPerPage: 20,
@@ -123,15 +135,28 @@ export default {
     },
     setPaginationObject(paginationData) {
       this.pagination = {
-        sortBy: 'desc',
-        descending: false,
+        sortBy: this.pagination.sortBy,
+        descending: this.pagination.descending,
         page: paginationData.page,
         rowsPerPage: paginationData.limit,
         rowsNumber: paginationData.total
       }
     },
     onRequest({ pagination }) {
-      this.fetchData(pagination.page)
+      const { sortBy, page, descending } = pagination
+      if (sortBy) {
+        this.sortData(sortBy, descending)
+      } else {
+        this.fetchData(page)
+      }
+      this.pagination.sortBy = sortBy
+      this.pagination.descending = descending
+    },
+    sortData(sortBy, descending) {
+      const sortFn = descending
+        ? (a, b) => (a[sortBy] > b[sortBy] ? -1 : a[sortBy] < b[sortBy] ? 1 : 0)
+        : (a, b) => (a[sortBy] > b[sortBy] ? 1 : a[sortBy] < b[sortBy] ? -1 : 0)
+      this.users.sort(sortFn)
     },
     confirmDelete(user) {
       this.$q
