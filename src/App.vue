@@ -1,14 +1,14 @@
 <template>
   <q-layout view="hhh lpr fff" id="q-app">
     <q-page-container>
-      <router-view key="$route.fullPath" />
+      <router-view key="$route.fullPath" style="min-height: 0" />
     </q-page-container>
     <q-footer class="footer text-white">
       <div class="row justify-between items-center q-px-md q-px-sm-xl q-pt-lg">
         <div
           class="
             col-xs-12 col-sm-6
-            text-h5 text-bold
+            text-h5 text-semi-bold
             q-px-xs-sm q-px-sm-none q-pt-md q-py-sm-sm
           "
         >
@@ -54,11 +54,23 @@
           "
         >
           <span
-            class="col-xs-3 col-sm-4 q-pb-xs-md q-pb-sm-none row justify-sm-end"
+            class="
+              col-xs-3 col-sm-4
+              q-pb-xs-md q-pb-sm-none
+              row
+              justify-sm-end
+              cursor-pointer
+            "
             >Terms of Use
           </span>
           <span
-            class="col-xs-3 col-sm-4 q-pb-xs-md q-pb-sm-none row justify-sm-end"
+            class="
+              col-xs-3 col-sm-4
+              q-pb-xs-md q-pb-sm-none
+              row
+              justify-sm-end
+              cursor-pointer
+            "
             >Privacy policy
           </span>
         </div>
